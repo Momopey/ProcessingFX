@@ -1,9 +1,15 @@
 package com.symbol.primative;
 
+import com.appsystem.RendererInfo;
 import com.symbol.ChildrenContainer;
+import jogamp.opengl.awt.Java2D;
 import processing.core.PGraphics;
 import processing.core.PVector;
 import java.awt.*;
+
+import static processing.core.PConstants.JAVA2D;
+import static processing.core.PConstants.P2D;
+
 public class SymbolCircle extends SymbolPrim {
     protected float diameter;
     protected Color fillColor;
@@ -17,8 +23,8 @@ public class SymbolCircle extends SymbolPrim {
         strokeColor=dStroke;
     }
     public void draw(PGraphics graphic) {
-        fill(graphic,fillColor,alphaMult);
-        stroke(graphic,strokeColor,alphaMult);
+        fill(graphic,fillColor);
+        stroke(graphic,strokeColor);
         graphic.strokeWeight(strokeWeight);
         graphic.ellipse(0, 0, diameter,diameter);
     }

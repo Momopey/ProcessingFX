@@ -12,7 +12,11 @@ public class Circle2 extends SymbolCircle {
     public Circle2(ChildrenContainer dParent, PVector dPos, PVector dVel, float dDiam){
         super(dParent,dPos,dDiam,5, new Color(255,255,255,255),new Color(0,0,0,255),1);
         velocity=dVel;
+    }
 
+    public void loadFrame(int dFrameNumber){
+//        System.out.println("loading frame circle");
+        timeline.loadFrame(dFrameNumber);
     }
     public void update(){
 //        position=position.add(velocity);

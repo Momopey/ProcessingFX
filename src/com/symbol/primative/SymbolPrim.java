@@ -11,9 +11,9 @@ public class SymbolPrim extends Symbol implements SymbolChild {
     public SymbolPrim(ChildrenContainer dParent, PVector dPos, PVector dCenter, float dAngle, float dScale, float dAlpha){
         super(dPos,dCenter,dAngle,dScale,dAlpha);
         setParentContainer(dParent);
-        setAlpha();
 //        alphaMult=alpha;
 //        alphaMult*=parentContainer.getActiveParent().getAlphaMult();
+        fixTint();
     }
 
     @Override
@@ -28,8 +28,8 @@ public class SymbolPrim extends Symbol implements SymbolChild {
     }
 
     @Override
-    public void setAlpha(){
-        alphaMult=alpha;
-        alphaMult*=parentContainer.getActiveParent().alphaMult;
+    public void fixTint() {
+        absoluteTint=tint(tint,parentContainer.getActiveParent().getAbsoluteTint());
+        super.fixTint();
     }
 }
