@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="PAnimApp:jar">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="PAnimApp.jar">
+      <element id="module-output" name="PAnimApp" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/Core_11.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

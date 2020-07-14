@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ColorPicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="superParent" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.javafx.Controller">
+    <children>
+        <MenuBar layoutY="2.0" AnchorPane.bottomAnchor="775.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <menus>
+                <Menu mnemonicParsing="false" text="File">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#exit" text="Close" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Edit">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#clearCanvas" text="Clear Canvas" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="About" />
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+        <SplitPane dividerPositions="0.22769953051643194" layoutY="24.0" prefHeight="776.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
+            <items>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                    <children>
+                        <Accordion layoutX="7.0" layoutY="7.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <panes>
+                                <TitledPane animated="false" text="Info">
+                                    <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                            <children>
+                                                <GridPane layoutX="21.4" layoutY="20.4" prefHeight="369.0" prefWidth="572.0" AnchorPane.bottomAnchor="339.0" AnchorPane.leftAnchor="11.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                                                    <columnConstraints>
+                                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="285.0" minWidth="10.0" prefWidth="285.0" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="287.0" minWidth="10.0" prefWidth="287.0" />
+                                                    </columnConstraints>
+                                                    <rowConstraints>
+                                                        <RowConstraints maxHeight="300.0" minHeight="10.0" prefHeight="122.99999237060547" vgrow="SOMETIMES" />
+                                                        <RowConstraints maxHeight="292.0" minHeight="10.0" prefHeight="122.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints maxHeight="140.0" minHeight="10.0" prefHeight="112.0" vgrow="SOMETIMES" />
+                                                    </rowConstraints>
+                                                    <children>
+                                                        <Label text="FrameCount:">
+                                                            <font>
+                                                                <Font size="36.0" />
+                                                            </font>
+                                                        </Label>
+                                                        <Label text="FrameRate" GridPane.rowIndex="1">
+                                                            <font>
+                                                                <Font size="36.0" />
+                                                            </font>
+                                                        </Label>
+                                                        <Label text="Canvas Width" GridPane.rowIndex="2">
+                                                            <font>
+                                                                <Font size="36.0" />
+                                                            </font>
+                                                        </Label>
+                                                        <Label fx:id="frameCount" GridPane.columnIndex="1">
+                                                            <font>
+                                                                <Font size="36.0" />
+                                                            </font>
+                                                        </Label>
+                                                        <Label fx:id="frameRate" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                                            <font>
+                                                                <Font size="36.0" />
+                                                            </font>
+                                                        </Label>
+                                                        <Label fx:id="canvasWidth" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                                            <font>
+                                                                <Font size="36.0" />
+                                                            </font>
+                                                        </Label>
+                                                    </children>
+                                                </GridPane>
+                                            </children>
+                                        </AnchorPane>
+                                    </content>
+                                </TitledPane>
+                                <TitledPane fx:id="controlPane" animated="false" text="Control">
+                                    <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                            <children>
+                                                <GridPane layoutX="51.4" layoutY="40.4" prefHeight="332.0" prefWidth="518.0" AnchorPane.bottomAnchor="356.0" AnchorPane.leftAnchor="41.0" AnchorPane.rightAnchor="34.0" AnchorPane.topAnchor="30.0">
+                                                    <columnConstraints>
+                                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="269.0" minWidth="10.0" prefWidth="256.0" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="272.0" minWidth="10.0" prefWidth="262.0" />
+                                                    </columnConstraints>
+                                                    <rowConstraints>
+                                                        <RowConstraints maxHeight="226.0" minHeight="10.0" prefHeight="103.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints maxHeight="333.00000762939453" minHeight="0.0" prefHeight="103.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints maxHeight="371.0" minHeight="10.0" prefHeight="109.0" vgrow="SOMETIMES" />
+                                                    </rowConstraints>
+                                                    <children>
+                                                        <Label text="Pen Colour:">
+                                                            <font>
+                                                                <Font size="20.0" />
+                                                            </font>
+                                                        </Label>
+                                                        <Label text="Pen Size:" GridPane.rowIndex="1">
+                                                            <font>
+                                                                <Font size="20.0" />
+                                                            </font>
+                                                        </Label>
+                                                        <Label text="Background Brightness:" GridPane.rowIndex="2">
+                                                            <font>
+                                                                <Font size="20.0" />
+                                                            </font>
+                                                        </Label>
+                                                        <Slider fx:id="bgBrightness" max="255.0" value="255.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                                        <Slider fx:id="penSize" blockIncrement="1.0" max="20.0" min="1.0" value="5.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                        <ColorPicker fx:id="colorPicker" onAction="#pickColor" prefHeight="100.0" prefWidth="296.0" GridPane.columnIndex="1" />
+                                                    </children>
+                                                </GridPane>
+                                    <Slider fx:id="frameNumberSlider" layoutX="31.0" layoutY="338.0" prefHeight="16.0" prefWidth="206.0" />
+                                    <CheckBox fx:id="playbackCheckBox" layoutX="38.0" layoutY="363.0" mnemonicParsing="false" text="Playback" />
+                                    <GridPane layoutX="26.0" layoutY="443.0" prefHeight="235.0" prefWidth="248.0">
+                                      <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="305.0" minWidth="10.0" prefWidth="162.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="407.0" minWidth="10.0" prefWidth="173.0" />
+                                      </columnConstraints>
+                                      <rowConstraints>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                      </rowConstraints>
+                                       <children>
+                                          <Label text="Tween end framecount">
+                                             <font>
+                                                <Font size="20.0" />
+                                             </font>
+                                          </Label>
+                                          <Slider fx:id="tweenEndFrameSlider" prefHeight="16.0" prefWidth="336.0" GridPane.columnIndex="1" />
+                                          <Button fx:id="debugInfoButton" mnemonicParsing="false" text="Print debug info" GridPane.rowIndex="1" />
+                                       </children>
+                                    </GridPane>
+                                    <Label layoutX="28.0" layoutY="402.0" text="Temporary Interaction stuff">
+                                       <font>
+                                          <Font size="22.0" />
+                                       </font>
+                                    </Label>
+                                    <Button fx:id="frameIncrementButton" layoutX="204.0" layoutY="359.0" mnemonicParsing="false" text="+" />
+                                    <Button fx:id="frameDecrementButton" layoutX="242.0" layoutY="359.0" mnemonicParsing="false" text="-" />
+                                    <Label layoutX="148.0" layoutY="361.0" prefHeight="17.0" prefWidth="56.0" text="Frame">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </Label>
+                                            </children>
+                                        </AnchorPane>
+                                    </content>
+                                </TitledPane>
+                        <TitledPane animated="false" text="Animation Settings">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="244.0">
+                                 <children>
+                                    <GridPane prefHeight="380.0" prefWidth="595.0">
+                                      <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                      </columnConstraints>
+                                      <rowConstraints>
+                                        <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="0.0" vgrow="SOMETIMES" />
+                                        <RowConstraints maxHeight="170.0" minHeight="10.0" prefHeight="145.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                      </rowConstraints>
+                                       <children>
+                                          <VBox prefWidth="100.0">
+                                             <children>
+                                                <Label prefHeight="17.0" prefWidth="273.0" text="File Path:">
+                                                   <font>
+                                                      <Font size="20.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label text="&lt;FILEPATH&gt;" />
+                                             </children>
+                                          </VBox>
+                                          <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">
+                                             <children>
+                                                <TextField />
+                                             </children>
+                                          </VBox>
+                                          <Button fx:id="exportVideoButton" mnemonicParsing="false" text="Export video as image sequence" GridPane.rowIndex="1" />
+                                       </children>
+                                    </GridPane>
+                                 </children>
+                              </AnchorPane>
+                          </content>
+                        </TitledPane>
+                            </panes>
+                        </Accordion>
+                    </children>
+                </AnchorPane>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                    <children>
+                        <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <children>
+                                <ToolBar prefHeight="0.0" prefWidth="676.0">
+                                    <items>
+                                        <Label text="Pen Colors:">
+                                            <font>
+                                                <Font size="18.0" />
+                                            </font>
+                                        </Label>
+                                        <Button fx:id="red" mnemonicParsing="false" onAction="#redPen" text="Red" textFill="RED">
+                                            <font>
+                                                <Font size="14.0" />
+                                            </font>
+                                        </Button>
+                                        <Button fx:id="green" mnemonicParsing="false" onAction="#greenPen" text="Green" textFill="LIME">
+                                            <font>
+                                                <Font size="14.0" />
+                                            </font>
+                                        </Button>
+                                        <Button fx:id="blue" mnemonicParsing="false" onAction="#bluePen" text="Blue" textFill="BLUE">
+                                            <font>
+                                                <Font size="14.0" />
+                                            </font>
+                                        </Button>
+                                    </items>
+                                </ToolBar>
+                        <SplitPane dividerPositions="0.6429548563611491" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" orientation="VERTICAL">
+                          <items>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="489.0" prefWidth="673.0">
+                                 <children>
+                                    <SplitPane dividerPositions="0.7568947906026557" prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                      <items>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                             <children>
+                                                        <StackPane fx:id="processing" alignment="TOP_LEFT" prefHeight="457.0" prefWidth="676.0" />
+                                             </children>
+                                          </AnchorPane>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
+                                      </items>
+                                    </SplitPane>
+                                 </children>
+                              </AnchorPane>
+                            <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0">
+                                 <children>
+                                    <ScrollPane fx:id="CanvasContainerScrollPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                      <content>
+                                        <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0">
+                                             <children>
+                                                <Canvas fx:id="editorCanvas" height="257.0" width="1002.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                             </children>
+                                          </AnchorPane>
+                                      </content>
+                                    </ScrollPane>
+                                 </children>
+                              </AnchorPane>
+                          </items>
+                        </SplitPane>
+                            </children>
+                        </VBox>
+                    </children>
+                </AnchorPane>
+            </items>
+        </SplitPane>
+    </children>
+</AnchorPane>
