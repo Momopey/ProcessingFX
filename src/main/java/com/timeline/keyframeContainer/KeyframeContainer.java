@@ -1,5 +1,6 @@
 package com.timeline.keyframeContainer;
 
+import com.debug.Debugable;
 import com.mode.Mode;
 import com.timeline.keyframe.Keyframe;
 import com.timeline.Timeline;
@@ -13,7 +14,9 @@ import java.util.ArrayList;
 //2: Check resolvement -> Insures that the keyframes to be loaded are resolved
 //3: Manage the addition/Removal/general modification of keyframes (This is more general and tends to be done by more specific controller classes)
 //4: Give some useful functions that child keyframes can use (Same idea of being very general).
-public class KeyframeContainer {
+public class KeyframeContainer implements Debugable {
+    protected String Name;
+
     protected Timeline parentTimeline;
     protected Mode mode;
     protected ArrayList<Keyframe> keyframes;
@@ -121,5 +124,23 @@ public class KeyframeContainer {
         for(Keyframe K:keyframes) {
             K.drawKeyframeInTimeline(editorGC);
         }
+    }
+
+
+    //Debugable
+    @Override
+    public String getName() {
+        return Name;
+    }
+
+    @Override
+    public String getDebugInfo() {
+        return "| ("+Name+") debug info- TODO |";
+    }
+
+    @Override
+    public KeyframeContainer setName(String newName) {//A self returner builder pattern
+        Name=newName;
+        return this;
     }
 }

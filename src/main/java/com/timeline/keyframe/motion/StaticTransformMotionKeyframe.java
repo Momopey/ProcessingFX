@@ -24,4 +24,10 @@ public class StaticTransformMotionKeyframe extends MotionKeyframe {
     public void requestResolveRelationship(Keyframe requester) {
         addDependentResolveRelationship(requester);
     }
+
+    @Override
+    public StaticTransformMotionKeyframe setName(String newName) {
+        Name=newName;
+        return this;
+    }
 }

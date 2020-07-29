@@ -1,5 +1,7 @@
 package com.symbol;
 
+import com.processing.PAnim;
+import com.util.SimpleMatrix;
 import processing.core.PGraphics;
 import processing.core.PVector;
 
@@ -18,6 +20,16 @@ public class ParentSymbol extends Symbol{
         symbolContainer =new SymbolContainer();
         symbolContainer.setParentSymbol(this);
     }
+    public ParentSymbol(SimpleMatrix defaultSpace, float dAlpha, SymbolContainer dChildContainer){
+        super(defaultSpace,dAlpha);
+        symbolContainer =dChildContainer;
+        symbolContainer.setParentSymbol(this);
+    }
+    public ParentSymbol(SimpleMatrix defaultSpace, float dAlpha){
+        super(defaultSpace,dAlpha);
+        symbolContainer =new SymbolContainer();
+        symbolContainer.setParentSymbol(this);
+    }
 
     public SymbolContainer getSymbolContainer(){
         return symbolContainer;
@@ -27,18 +39,24 @@ public class ParentSymbol extends Symbol{
 ////        childContainer=dChildContainer;
 ////        childContainer.setParentSymbol(this);
 ////    }
-    public void draw(PGraphics graphic){
-        sceneDraw(graphic);
+    public void viewDraw(PGraphics graphic){
+        draw(graphic);
+        if(PAnim.processing.playbackInfo.showGizmos) {
+            drawGizmos(graphic);
+        }
         symbolContainer.render(graphic);
 //        super.draw(graphic);
     }
-    public void sceneDraw(PGraphics graphic){
-        stroke(graphic,Color.BLACK);
+    public void draw(PGraphics graphic){
+        //whatev
+    }
+    public void drawGizmos(PGraphics graphic){
+        stroke(graphic, Color.BLACK);
         graphic.strokeWeight(2);
         graphic.noFill();
-        graphic.rect(1,1, graphic.width-1, graphic.height-1);
+        graphic.rect(1, 1, graphic.width - 1, graphic.height - 1);
         graphic.fill(0);
-        graphic.rect(10,10,10,10);
+        graphic.rect(10, 10, 10, 10);
     }
     @Override
     public void fixSymbol(){

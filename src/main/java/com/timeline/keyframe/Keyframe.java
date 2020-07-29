@@ -2,21 +2,37 @@ package com.timeline.keyframe;
 
 import com.debug.Debugable;
 import com.javafx.Controller;
+import com.javafx.editor.EditorCanvasHandler;
+import com.javafx.editor.EditorField;
+import com.javafx.editor.Region;
 import com.mode.Mode;
+import com.processing.PAnim;
 import com.symbol.Symbol;
 import com.timeline.Timeline;
 import com.timeline.keyframeContainer.KeyframeContainer;
 import com.timeline.keyframe.statechange.StateChangeKeyframe;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.MouseEvent;
 
 import java.util.LinkedHashSet;
 
 //Keyframe: A class for keyframes within timelinecontrollers. Controlls certain parameters in the parent symbol.
-public class Keyframe implements Debugable{
+public class Keyframe extends EditorField implements Debugable {
     protected String Name;
 
     protected int frameStart;
     protected int length;
+
+    // Editor properties
+    protected boolean canEditStartStop;
+    protected Region leftEdgeRegion= new Region(0-3,0,6,25);
+    protected Region rightEdgeRegion= new Region(0-3,0,6,25);
+
+    public void initEditorProps(){
+        canEditStartStop=true;
+        regions.add(leftEdgeRegion);
+        regions.add(rightEdgeRegion);
+    }
 
     public int getFrameStart() {
         return frameStart;
@@ -64,11 +80,13 @@ public class Keyframe implements Debugable{
     }
 
     public Keyframe(Mode dMode, int dFrameStart, int dLength){
+
         frameStart=dFrameStart;
         length=dLength;
         mode=dMode;
         requiredResolve=new LinkedHashSet<>();
         dependentResolve=new LinkedHashSet<>();
+        initEditorProps();
 //        if(mode != parentController.getMode()){
 //            System.out.println("Wrong mode for keymode");
 //        }
@@ -77,14 +95,20 @@ public class Keyframe implements Debugable{
         frameStart=dFrameStart;
         length=dLength;
         mode=dMode;
-        parentController=dParentController;
+//        parentController=dParentController;
+        setParentController(dParentController);
         if(mode != parentController.getMode()){
             System.out.println("Wrong mode for keymode");
         }
+        initEditorProps();
     }
+
 
     public void setParentController(KeyframeContainer parentController) {
         this.parentController = parentController;
+        if(parentController.getParentTimeline().parentSymbol == PAnim.processing.editorCanvasHandler.getEditorActiveSymbol()){
+            addToEditorCanvasHandler();
+        }
     }
 
     public int getFrameNumberIn(int frameInController){
@@ -283,6 +307,7 @@ public class Keyframe implements Debugable{
         int x=frameStart;
         int y=getParentController().indexInTimeline();
         int w=length;
+        editorGC.setLineWidth(1);
         editorGC.setFill(new javafx.scene.paint.Color(0.730,0.7,0.7,0.94));
         editorGC.setStroke(new javafx.scene.paint.Color(0.4,0.4,0.4,0.80));
         editorGC.fillRect(12*(6+x)+1,15+25*(y)+1,12*w,25-2);
@@ -304,6 +329,42 @@ public class Keyframe implements Debugable{
         //Special icon
         if(w>=3) {
             editorGC.strokeRect(12 * (6 + x) + 10 + 4, 15 + 25 * (y) + 3, 18, 18);
+        }
+
+        //gizmos
+        leftEdgeRegion.drawRangeGizmo(this,editorGC);
+        rightEdgeRegion.drawRangeGizmo(this,editorGC);
+    }
+
+    @Override
+    public void draw(EditorCanvasHandler editorCanvasHandler) {
+        GraphicsContext editorGC= editorCanvasHandler.getGC();
+        updateEditor();
+        drawKeyframeInTimeline(editorGC);
+    }
+
+    @Override
+    public void updateEditorPosition() {
+        setX(12*(6+frameStart)+1);
+        setY(15+25*(getParentController().indexInTimeline()));
+    }
+
+    @Override
+    public void updateEditorReigons() {
+        rightEdgeRegion.x=12*length-3;
+    }
+
+    @Override
+    public void onHoldDrag(MouseEvent event){
+        if(heldReigon==leftEdgeRegion){
+            int newStart=(int) Math.floor((((float)event.getX())-1f)/12f-6f);
+            stateChange((keyframe)->{keyframe.setFrameStart(newStart);});
+            PAnim.processing.playbackInfo.updated();
+        }
+        if(heldReigon==rightEdgeRegion){
+            System.out.println("yo selected rightEdge" );
+            int newLength= Math.max((int) Math.floor((((float)event.getX())-1f)/12f-6f)+1-frameStart,1);
+            stateChange((keyframe)->{keyframe.setLength(newLength);});
         }
     }
 }

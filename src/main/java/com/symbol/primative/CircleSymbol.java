@@ -19,7 +19,14 @@ public class CircleSymbol extends CompSymbol{
         fillColor=dFill;
         strokeColor=dStroke;
     }
-    public void draw(PGraphics graphic) {
+    public CircleSymbol( PVector dPos, float dDiam, float dStrokeWeight, Color dFill, Color dStroke, float dAlpha) {
+        super(dPos, new PVector(0, 0), 0,1, dAlpha);
+        diameter = dDiam;
+        strokeWeight= dStrokeWeight;
+        fillColor=dFill;
+        strokeColor=dStroke;
+    }
+    public void viewDraw(PGraphics graphic) {
         fill(graphic,fillColor);
         stroke(graphic,strokeColor);
         graphic.strokeWeight(strokeWeight);

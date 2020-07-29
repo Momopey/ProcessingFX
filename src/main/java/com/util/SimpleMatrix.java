@@ -11,8 +11,8 @@ import static processing.core.PApplet.*;
 public class SimpleMatrix implements Transform {
     protected PVector position;
     protected PVector center;
-    protected double angle;
-    protected double scale;
+    protected double angle=0;
+    protected double scale=1;
     public SimpleMatrix(PVector dPos,PVector dCenter,double dAngle,double dScale){
         setPosition(dPos);
         setCenter(dCenter);
@@ -25,20 +25,32 @@ public class SimpleMatrix implements Transform {
         scale=1f;
     }
 
-    public void setPosition(PVector dPosition) {
+    public SimpleMatrix setPosition(PVector dPosition) {
         position=dPosition;
+        return this; //this returner
+    }
+    public SimpleMatrix setPosition(float x, float y) {
+        position= new PVector(x,y);
+        return this; //this returner
     }
 
-    public void setCenter(PVector dCenter) {
+    public SimpleMatrix setCenter(PVector dCenter) {
         center=dCenter;
+        return this; //this returner
+    }
+    public SimpleMatrix setCenter(float x, float y) {
+        center=new PVector(x,y);
+        return this; //this returner
     }
 
-    public void setAngle(double angle) {
+    public SimpleMatrix setAngle(double angle) {
         this.angle = angle;
+        return this; //this returner
     }
 
-    public void setScale(double scale) {
+    public SimpleMatrix setScale(double scale) {
         this.scale = scale;
+        return this; //this returner
     }
 
     public PVector getPosition() {

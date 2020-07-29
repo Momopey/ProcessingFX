@@ -2,6 +2,7 @@ package com.timeline.keyframe.space;
 
 import com.mode.Mode;
 import com.processing.PAnim;
+import com.timeline.keyframe.motion.TweenTransformMotionKeyframe;
 import com.timeline.keyframeContainer.KeyframeContainer;
 import com.timeline.keyframe.Keyframe;
 import com.timeline.keyframe.motion.SpaceMotionKeyframe;
@@ -113,5 +114,10 @@ public class SpaceKeyframe extends Keyframe {
             return super.getDebugInfo() + " nextKeyframe:(" + nextSpaceKeyframe.Name + ") ";
         }
         return  super.getDebugInfo();
+    }
+    @Override
+    public SpaceKeyframe setName(String newName) {
+        Name=newName;
+        return this;
     }
 }

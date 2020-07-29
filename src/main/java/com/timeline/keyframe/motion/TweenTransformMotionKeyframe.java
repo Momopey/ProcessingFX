@@ -1,5 +1,7 @@
 package com.timeline.keyframe.motion;
 
+import com.debug.Debugable;
+import com.symbol.Symbol;
 import com.timeline.keyframeContainer.KeyframeContainer;
 import com.util.SimpleMatrix;
 
@@ -43,5 +45,10 @@ public class TweenTransformMotionKeyframe extends MotionKeyframe {
         }
         super.resolveKeyframe();
 //        System.out.println("fixing the thing");
+    }
+    @Override
+    public TweenTransformMotionKeyframe setName(String newName) {
+        Name=newName;
+        return this;
     }
 }

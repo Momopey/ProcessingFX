@@ -1,8 +1,8 @@
 package com.symbol;
 
 
-import com.appsystem.RendererInfo;
 import com.debug.Debugable;
+import com.javafx.editor.EditorCanvasHandler;
 import com.mode.Mode;
 import com.processing.PAnim;
 import com.timeline.Timeline;
@@ -20,6 +20,7 @@ import static processing.core.PApplet.floor;
 
 // The base class of all animated objects in Panim(to be renamed). Inherits some necicary functionality from the interface
 public class Symbol implements SymbolFunctionality, Debugable {
+
     public Color getTint() {
         return tint;
     }
@@ -54,12 +55,20 @@ public class Symbol implements SymbolFunctionality, Debugable {
     public Set<Mode> modes;
     public enum RenderMode{STANDARD, PGRAPHIC}
     protected RenderMode renderMode;
+
+    // Symbol editor properties
+
     public Symbol(PVector dPos,PVector dCenter,float dAngle,float dScale,float dAlpha){
-        SimpleMatrix defaultSpace=new SimpleMatrix(dPos,dCenter,dAngle,dScale);
+        construct(new SimpleMatrix(dPos,dCenter,dAngle,dScale),dAlpha);
+    }
+    public Symbol(SimpleMatrix defaultSpace,float dAlpha){
+        construct(defaultSpace,dAlpha);
+    }
+    void construct(SimpleMatrix defaultSpace,float dAlpha){
         setSpaceMatrix(defaultSpace);
         timeline= new Timeline(this);
         System.out.println(timeline.spaceController);
-        timeline.spaceController.SetDefaultSpace(defaultSpace);
+        timeline.spaceController.SetDefaultSpace(spaceMatrix);
         modes= new HashSet<Mode>();
         addMode(PAnim.MODETimelineSpace);
         addMode(PAnim.MODETimelineMotion);
@@ -67,6 +76,9 @@ public class Symbol implements SymbolFunctionality, Debugable {
         absoluteTint= new Color(255,255,255,floor(255f*dAlpha));
         graphicsRender = PAnim.processing.renderInfo.createRenderGraphics(PAnim.processing);
         renderMode=RenderMode.STANDARD;
+    }
+    public void init(){
+        timeline.spaceController.SetDefaultSpace(spaceMatrix);
     }
     public void fixSymbol(){
         timeline.fixTimeline();
@@ -137,7 +149,7 @@ public class Symbol implements SymbolFunctionality, Debugable {
             graphicsRender.applyMatrix(matrixclone);
             graphicsRender.clear();
             graphic.tint(tint.getRed(), tint.getGreen(), tint.getBlue(), tint.getAlpha());
-            draw(graphicsRender);
+            viewDraw(graphicsRender);
             graphicsRender.endDraw();
             graphic.image(graphicsRender, 0, 0);
             graphic.setMatrix(matrix);
@@ -148,7 +160,7 @@ public class Symbol implements SymbolFunctionality, Debugable {
             SimpleMatrix thisTransform = spaceMatrix.clone();
             thisTransform.apply(transformMatrix);
             graphic.applyMatrix(thisTransform.getMatrix());
-            draw(graphic);
+            viewDraw(graphic);
             graphic.popMatrix();
         }
     }
@@ -159,7 +171,7 @@ public class Symbol implements SymbolFunctionality, Debugable {
 //    public void render(PShape shape){
 //        shape.ma
 //    }
-    public void draw(PGraphics graphic){
+    public void viewDraw(PGraphics graphic){
         //CHILD IMPLEMENT
     }
 
@@ -176,13 +188,16 @@ public class Symbol implements SymbolFunctionality, Debugable {
         return timeline;
     }
 
-    public void drawSymbolTimeline(Canvas editorCanvas){
+    public void drawSymbolTimeline(EditorCanvasHandler editorCanvasHandler){
 //        System.out.println("Timeline:"+getTimeline().length);
-        int length=100;
+        Canvas editorCanvas= editorCanvasHandler.getCanvas();
+        int length=200;
         int height=timeline.controllers.size()+2;
         int numControllers=timeline.controllers.size();
         GraphicsContext editorGC=editorCanvas.getGraphicsContext2D();;
         editorCanvas.widthProperty().setValue((12*(6+length)));
+
+        //Boundaries and regions
         editorGC.setFill(javafx.scene.paint.Color.WHITE);
         editorGC.fillRect(0, 0, editorCanvas.getWidth(), editorCanvas.getHeight());
         editorGC.setFill(new javafx.scene.paint.Color(0,0,0,0.03));
@@ -190,11 +205,17 @@ public class Symbol implements SymbolFunctionality, Debugable {
         editorGC.fillRoundRect(12*6,0,12*(6+length),15+25*numControllers,10,10);
         editorGC.fillRoundRect(12*6,0,12*(6+length),15+25*height+15,10,10);
         editorGC.fillRoundRect(0,15,12*(6+length),15+25*6,10,10);
+
+        // Name of symbol
         editorGC.setFont(new javafx.scene.text.Font(12));
         editorGC.setFill(javafx.scene.paint.Color.BLACK);
-        editorGC.fillText(getName(),8,11);
+        editorGC.fillText(getName(),8,11,60);
+
+        // Draw grid
         editorGC.setLineWidth(1);
         editorGC.setFont(new Font(10));
+
+        //Draw Columns
         for(int i=0;i<length;i++) {
             editorGC.setFill(new javafx.scene.paint.Color(0,0,0,0.4));
             editorGC.fillText(String.valueOf(i%10),12*(6+i)+2,11);
@@ -206,16 +227,18 @@ public class Symbol implements SymbolFunctionality, Debugable {
                 editorGC.strokeLine(12 * (6 + i), 15, 12 * (6 + i), 15 + 25 * height);
             }
         }
+
+        //Draw rows
         editorGC.setStroke(new javafx.scene.paint.Color(0,0,0,0.06));
         for(int i=0;i<height+1;i++){
             editorGC.strokeLine(12 * (1), 15+25*i, 12 * (6 + length), 15+25*i);
+            if(i<numControllers) {
+                editorGC.fillText(timeline.controllers.get(i).getName(), 8, 15 + 25 * i + 11, 60);
+            }
         }
         editorGC.setStroke(new javafx.scene.paint.Color(0,0,0,0.1));
         editorGC.strokeLine(12 * (1), 15+25*numControllers, 12 * (6 + length), 15+25*numControllers);
-        timeline.drawTimelineInEditor(editorGC);
-
-
-
+//        timeline.drawTimelineInEditor(editorGC);
     }
 
     @Override

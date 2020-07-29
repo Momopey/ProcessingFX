@@ -36,7 +36,8 @@ public class SymbolContainer {
         return children;
     }
     public void addChild(ChildSymbol child){
-//        child.SetContainer(this);
+//        child.setParentContainer(this);
+//        child.init();
         children.add(child);
     }
     public void loadFrame(int frameNumber, ParentSymbol dActiveParent){

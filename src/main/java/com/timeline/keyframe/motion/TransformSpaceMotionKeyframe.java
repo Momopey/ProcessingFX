@@ -48,4 +48,10 @@ public class TransformSpaceMotionKeyframe extends SpaceMotionKeyframe {
 //        newSpace.resolveKeyframe();
         newSpace.resolveNewSpace();
     }
+
+    @Override
+    public TransformSpaceMotionKeyframe setName(String newName) {
+        Name=newName;
+        return this;
+    }
 }

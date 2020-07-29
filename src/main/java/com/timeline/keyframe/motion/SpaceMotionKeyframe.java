@@ -129,10 +129,15 @@ public abstract class SpaceMotionKeyframe extends MotionKeyframe {
         return false;
     }
     @Override
-    public String getDebugInfo(){
-        if(newSpace==null){
+    public String getDebugInfo() {
+        if (newSpace == null) {
             return super.getDebugInfo();
         }
-        return super.getDebugInfo()+newSpace.getDebugInfo();
+        return super.getDebugInfo() + newSpace.getDebugInfo();
+    }
+    @Override
+    public SpaceMotionKeyframe setName(String newName) {
+        Name=newName;
+        return this;
     }
 }

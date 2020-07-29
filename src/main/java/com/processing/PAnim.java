@@ -3,7 +3,10 @@ package com.processing;
 import com.appsystem.AnimRenderer;
 import com.appsystem.RendererInfo;
 import com.javafx.App;
+import com.javafx.editor.EditorCanvasHandler;
 import com.javafx.Controller;
+import com.javafx.editor.EditorField;
+import com.javafx.editor.Region;
 import com.mode.Mode;
 import com.mode.ModeTimelineMotion;
 import com.mode.ModeTimelineSpace;
@@ -21,6 +24,9 @@ import javafx.application.Application;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import net.bramp.ffmpeg.FFmpeg;
 import net.bramp.ffmpeg.FFmpegExecutor;
 import net.bramp.ffmpeg.builder.FFmpegBuilder;
@@ -41,22 +47,29 @@ public class PAnim extends PApplet {
     public int bgColor = 255;
     private Label framecount, framerate, canvaswidth;
 
-    public static PAnim processing;
+    public static PAnim processing; // This
     AnimRenderer renderer;
-//    class RenderInfo{
-//        int  width=1280;
-//        int height=720;
-//        String renderer=JAVA2D;
-//        public PGraphics createRenderGraphics(){
-//            return createGraphics(renderInfo.width,renderInfo.height, renderInfo.renderer);
-//        }
-//        public AnimRenderer createRenderer(int frameNum){
-//            return new AnimRenderer(createRenderGraphics(),mainScene,frameNum);
-//        }
-//    }
 
+    public EditorCanvasHandler editorCanvasHandler= new EditorCanvasHandler();
 
-    public class PlaybackInfo{
+    public RendererInfo renderInfo= new RendererInfo(1920,1080,FX2D_CLEAN);
+    public PlaybackInfo playbackInfo= new PlaybackInfo();
+
+    public ParentSymbol mainScene;
+    public SymbolContainer mainContainer;
+    public static PGraphics graphicsWindow;
+    public ArrayList<SymbolContainer> savedContainers;
+    public static Set<Mode> MODES;
+    public static ModeTimelineMotion MODETimelineMotion;
+    public static ModeTimelineSpace MODETimelineSpace;
+
+    public class PlaybackInfo extends EditorField {
+        public PlaybackInfo(){
+            setX(12*(6)+1);
+            setZ(100);
+            regions.add(new Region(0,0,12*100,12));
+        }
+
         public int getFrame() {
             return frame;
         }
@@ -77,11 +90,15 @@ public class PAnim extends PApplet {
         int prevframe=-1;
         boolean updated=false;
         public boolean playback=false;
+
+        // Display details
+        public boolean showGizmos=true;
+
         public void setFrame(int newFrameNumber){
-            if(playback==false){
+//            if(playback==false){
                 frame=newFrameNumber;
 //                System.out.println("New frame"+frame);
-            }
+//            }
         }
         public void incFrame(int inc){
             if(playback==false){
@@ -106,7 +123,9 @@ public class PAnim extends PApplet {
             updated=true;
         }
 
-        public void drawFrameRay(GraphicsContext editorGC){
+        @Override
+        public void draw(EditorCanvasHandler editorCanvasHandler){
+            GraphicsContext editorGC= editorCanvasHandler.getGC();
 //            int frame=2;
             editorGC.setFill(new javafx.scene.paint.Color(0.40,0.4,0.9,0.8));
             editorGC.setStroke(new javafx.scene.paint.Color(0.4,0.4,0.4,0.80));
@@ -114,20 +133,37 @@ public class PAnim extends PApplet {
             editorGC.strokeRect(12*(6+frame)+1,2,12,15-3);
             editorGC.setStroke(new javafx.scene.paint.Color(0.40,0.4,0.9,0.8));
             editorGC.setLineWidth(3);
-            editorGC.strokeLine(12*(6+frame)+4+3,15,12*(6+frame)+4+3,15 + 25 * height+15);
+            editorGC.strokeLine(12*(6+frame)+4+3,15,12*(6+frame)+4+3,15 + 25 * 10+15);
+        }
+
+        @Override
+        public void updateEditorPosition() {
+        }
+
+        @Override
+        public void updateEditorReigons() {
+        }
+
+        @Override
+        public void onHoldDrag(MouseEvent event){
+            System.out.println("MouseHold Event at x:"+event.getX()+" y:"+event.getY());
+            setFrame((int) Math.floor((((float)event.getX())-1f)/12f-6f));
+        }
+
+        @Override
+        public void onKeyPressed(KeyEvent event){
+            if(event.getCode()== KeyCode.RIGHT){
+                incFrame(1);
+            }else if(event.getCode()== KeyCode.LEFT){
+                incFrame(-1);
+            }
+            if(event.getCode()== KeyCode.ENTER){
+                setPlayback(!playback);
+            }
         }
     }
 
-    public RendererInfo renderInfo= new RendererInfo(1280,720,FX2D_CLEAN);
-    public PlaybackInfo playbackInfo= new PlaybackInfo();
 
-    public ParentSymbol mainScene;
-    public SymbolContainer mainContainer;
-    public static PGraphics graphicsWindow;
-    public ArrayList<SymbolContainer> savedContainers;
-    public static Set<Mode> MODES;
-    public static ModeTimelineMotion MODETimelineMotion;
-    public static ModeTimelineSpace MODETimelineSpace;
 
 
 
@@ -189,58 +225,79 @@ public class PAnim extends PApplet {
     }
 
     public void initSymbolsKeyframes(){
-        mainScene= (ParentSymbol) new ParentSymbol(new PVector(20,20),new PVector(0,0),0f,0.3f,1f, mainContainer).setName("MainScene");//graphicsWindow.width/2,graphicsWindow.height/2
-
+        mainScene=
+                (ParentSymbol) new ParentSymbol(
+                        new SimpleMatrix()
+                                .setPosition( new PVector(20,20))
+                                .setScale(0.3f)
+                        ,1f
+                        , mainContainer
+                ).setName("MainScene");//graphicsWindow.width/2,graphicsWindow.height/2
         System.out.println("Mainscene length"+ mainScene.getTimeline().length);;
         mainScene.getTimeline().setSize(0,100);
-        KeyframeContainer mainTranslationController=new MotionKeyframeContainer(mainScene.getTimeline());
+        KeyframeContainer mainTranslationController=new MotionKeyframeContainer(mainScene.getTimeline()).setName("Main Translation Controller");
 
-        TweenStartTranslationKeyframe=new TweenTransformMotionKeyframe(20).setNewTransform(new SimpleMatrix(new PVector(0,0),new PVector(0,0),0,1f)).setName("Tween start translation");
+        TweenStartTranslationKeyframe= new TweenTransformMotionKeyframe(20).setName("Tween start translation");
         mainTranslationController.addKeyFrame(TweenStartTranslationKeyframe);
 
-        TweenEndTranslationKeyframe=new TransformSpaceMotionKeyframe(50,1).setNewTransform(new SimpleMatrix(new PVector(200,200),new PVector(0,0),0.0f,0.4f)).setName("Tween end translation");
+        TweenEndTranslationKeyframe=
+                new TransformSpaceMotionKeyframe(50,1)
+                        .setNewTransform(
+                                new SimpleMatrix()
+                                        .setPosition(new PVector(200,200))
+                                        .setScale(0.4f)
+                        ).setName("Tween end translation");
         mainTranslationController.addKeyFrame(TweenEndTranslationKeyframe);
 
-//        mainScene.getTimeline().addTimelineController(mainTranslationController);
+        mainScene.getTimeline().addTimelineController(mainTranslationController);
 
-        KeyframeContainer mainRotationController=new MotionKeyframeContainer(mainScene.getTimeline());
+        KeyframeContainer mainRotationController=new MotionKeyframeContainer(mainScene.getTimeline()).setName("Main Rotation Controller");
 
-        TweenStartRotationKeyframe=new TweenTransformMotionKeyframe(20).setNewTransform(new SimpleMatrix(new PVector(0,0),new PVector(0,0), (float) 0,1f)).setName("Tween Start rotation");
+        TweenStartRotationKeyframe= new TweenTransformMotionKeyframe(20).setName("Tween Start rotation");
         mainRotationController.addKeyFrame(TweenStartRotationKeyframe);
 
 //        TweenEndRotationKeyframe =new TransformSpaceMotionKeyframe(20+40,1).setNewTransform(new SimpleMatrix(new PVector(400,100),new PVector(0,0), (float) 0.2,1f)).setName("Tween End rotation");
-        TweenEndRotationKeyframe =new TransformSpaceMotionKeyframe(20+40,1).setNewSpaceMatrix(new SimpleMatrix(new PVector(40,50),new PVector(0,0), (float) 0.2,0.8f)).setName("Tween End rotation");
+        TweenEndRotationKeyframe =
+                new TransformSpaceMotionKeyframe(20+40,1)
+                        .setNewSpaceMatrix(
+                                new SimpleMatrix()
+                                        .setPosition(new PVector(40,50))
+                                        .setAngle(0.2f)
+                                        .setScale(0.8f)
+                        ).setName("Tween End rotation");
         mainRotationController.addKeyFrame(TweenEndRotationKeyframe);
-//        mainScene.getTimeline().addTimelineController(mainRotationController);
-//        BallSymbol circle = (BallSymbol) new BallSymbol(mainChildren, new PVector(100, 100), new PVector(100, 100), 100).setName("CircleSymbol");
-//        circle.getTimeline().setSize(0, 1000);
-//            TimelineController BallController = new TimelineControllerMotion(circle.getTimeline());
-//            BallController.addKeyFrame(new TweenTransformMotionKeyframe(0).setNewTransform(new SimpleMatrix(new PVector(50, 50), new PVector(0, 0), 0, 1)).setName("circleTransform1"));
-//            BallController.addKeyFrame(new TransformSpaceMotionKeyframe(100, 1, new SimpleMatrix(new PVector(100, 50), new PVector(100, 100), 0.02, 1.1f)).setName("circleTransform"));
-//            circle.getTimeline().addTimelineController(BallController);
+        mainScene.getTimeline().addTimelineController(mainRotationController);
 
         for(int i=0;i<1;i++) {
-            BallSymbol circle = (BallSymbol) new BallSymbol(mainContainer, new PVector(random(graphicsWindow.width), random(graphicsWindow.height)), new PVector(100, 100), 50).setRenderMode(Symbol.RenderMode.STANDARD);
+            BallSymbol circle = new BallSymbol(mainContainer, new PVector(random(graphicsWindow.width), random(graphicsWindow.height)), new PVector(100, 100), 50).setRenderMode(Symbol.RenderMode.STANDARD);
             circle.getTimeline().setSize(0, 1000);
             KeyframeContainer BallController = new MotionKeyframeContainer(circle.getTimeline());
-            BallController.addKeyFrame(new TweenTransformMotionKeyframe(0).setNewTransform(new SimpleMatrix(new PVector(50,50), new PVector(100, 100), 0, 1)).setName("circleTransform1"));
-            BallController.addKeyFrame(new TransformSpaceMotionKeyframe(100, 1).setNewTransform(new SimpleMatrix(new PVector(random(100)-100, random(100)-100), new PVector(0, 0), random(1)-.3f, random(2))).setName("circleTransform"));
+            BallController.addKeyFrame(
+                    new TweenTransformMotionKeyframe(0)
+                            .setNewTransform(
+                                    new SimpleMatrix()
+                                            .setPosition(50,50)
+                                            .setCenter(25, 25)
+                            )
+                            .setName("circleTransform1")
+            );
+            BallController.addKeyFrame(
+                    new TransformSpaceMotionKeyframe(100, 1)
+                            .setNewTransform(
+                                    new SimpleMatrix()
+                                            .setPosition(100,100)
+                                            .setCenter(0, 0)
+                            )
+                            .setName("circleTransform")
+            );
             circle.getTimeline().addTimelineController(BallController);
-            for(int j=0;j<10;j++){
-                BallSymbol circle2 = (BallSymbol) new BallSymbol(circle.getSymbolContainer(), new PVector(4, 4), new PVector(0, 0), 50).setRenderMode(Symbol.RenderMode.STANDARD);
-                circle2.getTimeline().setSize(0, 1000);
-//                KeyframeContainer BallController2= new MotionKeyframeContainer(circle2.getTimeline());
-//                BallController2.addKeyFrame(new TweenTransformMotionKeyframe(0).setNewTransform(new SimpleMatrix(new PVector(50,50), new PVector(100, 100), 0, 1)).setName("circleTransform1"));
-//                BallController2.addKeyFrame(new TransformSpaceMotionKeyframe(100, 1).setNewTransform(new SimpleMatrix(new PVector(random(100)-100, random(100)-100), new PVector(0, 0), random(1)-.3f, random(2))).setName("circleTransform"));
-//                circle2.getTimeline().addTimelineController(BallController2);
-            }
         }
     }
 
     @Override
     public void setup() {
         Controller.p = this;
-        background(255);
+        background(bgColor);
         strokeWeight(5);
         processing= this;
         LoadModes();
@@ -254,6 +311,11 @@ public class PAnim extends PApplet {
         initSymbolsKeyframes();
         renderer= renderInfo.createRenderer(0,mainScene);
         renderer.start();
+
+        editorCanvasHandler.setActiveSymbol(mainScene);
+        editorCanvasHandler.init();
+
+        playbackInfo.addToEditorCanvasHandler();
     }
     int framesSpent=0;
     @Override
@@ -261,8 +323,9 @@ public class PAnim extends PApplet {
         framecount.setText(String.valueOf(frameCount));
         framerate.setText(String.valueOf(frameRate));
         canvaswidth.setText(String.valueOf(width));
-        background(255);
-        rect(100,100,100,100);
+        background(bgColor);
+//        System.out.println("BG:"+bgColor);
+//        rect(100,100,100,100);
 
         if(!renderer.isAlive()) {
 //            System.out.println("FrameSpent:"+framesSpent);
@@ -286,8 +349,9 @@ public class PAnim extends PApplet {
         image(graphicsWindow,0,0);
 
 //        mainScene.getTimeline().drawTimelineInEditor(Controller.controller.editorGC);
-        mainScene.drawSymbolTimeline(Controller.controller.editorCanvas);
-        playbackInfo.drawFrameRay(Controller.controller.editorGC);
+        editorCanvasHandler.draw();
+
+//        playbackInfo.drawFrameRay(Controller.controller.editorGC);
 //        TweenStartTranslationKeyframe.drawKeyframeInTimeline(Controller.controller.editorGC);
 //        TweenEndTranslationKeyframe.drawKeyframeInTimeline(Controller.controller.editorGC);
 //        TweenStartRotationKeyframe.drawKeyframeInTimeline(Controller.controller.editorGC);
@@ -330,7 +394,4 @@ public class PAnim extends PApplet {
         line(mouseX, mouseY, pmouseX, pmouseY);
     }
 
-    public void redraw() {
-        background(bgColor);
-    }
 }

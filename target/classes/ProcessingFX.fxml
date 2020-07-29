@@ -156,6 +156,7 @@
                                           </Label>
                                           <Slider fx:id="tweenEndFrameSlider" prefHeight="16.0" prefWidth="336.0" GridPane.columnIndex="1" />
                                           <Button fx:id="debugInfoButton" mnemonicParsing="false" text="Print debug info" GridPane.rowIndex="1" />
+                                          <CheckBox fx:id="showGizmosCheckBox" mnemonicParsing="false" selected="true" text="Show Gizmos" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                        </children>
                                     </GridPane>
                                     <Label layoutX="28.0" layoutY="402.0" text="Temporary Interaction stuff">

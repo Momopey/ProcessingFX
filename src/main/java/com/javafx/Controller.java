@@ -1,6 +1,7 @@
 package com.javafx;
 
 import com.processing.PAnim;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
@@ -12,7 +13,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import processing.javafx.PSurfaceFX;
+import javafx.scene.input.MouseEvent;
 
+import java.io.Console;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -36,7 +39,7 @@ public class Controller implements Initializable {
     @FXML
     ColorPicker colorPicker;
     @FXML
-    CheckBox playbackCheckBox;
+    CheckBox playbackCheckBox,showGizmosCheckBox;
     @FXML
     Button frameIncrementButton,frameDecrementButton,debugInfoButton,exportVideoButton;
     @FXML
@@ -58,7 +61,6 @@ public class Controller implements Initializable {
 
 
 
-
         System.out.println(editorCanvas.widthProperty().getValue());
         editorGC=editorCanvas.getGraphicsContext2D();
 //        editorGC.fillOval(0,0,editorCanvas.getWidth(),editorCanvas.getHeight());
@@ -66,74 +68,14 @@ public class Controller implements Initializable {
 
 //        CanvasContainerScrollPane.setHmax((12*(6+length)));
         CanvasContainerScrollPane.hmaxProperty().bind(editorCanvas.widthProperty());
-
-
-//        int length=100;
-//        int height=6;
-//        int numControllers=3;
-//        editorCanvas.widthProperty().setValue((12*(6+length)));
-//        editorGC.setFill(Color.WHITE);
-//        editorGC.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-//        editorGC.setFill(new Color(0,0,0,0.03));
-//        editorGC.fillRoundRect(0,0,12*(6+length),15+25*6+15,10,10);
-//        editorGC.fillRoundRect(12*6,0,12*(6+length),15+25*numControllers,10,10);
-//        editorGC.fillRoundRect(12*6,0,12*(6+length),15+25*height+15,10,10);
-//        editorGC.fillRoundRect(0,15,12*(6+length),15+25*6,10,10);
-//        editorGC.setFont(new Font(12));
-//        editorGC.setFill(Color.BLACK);
-//        editorGC.fillText("Hello world",8,11);
-//        editorGC.setLineWidth(1);
-//        editorGC.setFont(new Font(10));
-//        for(int i=0;i<length;i++) {
-//            editorGC.setFill(new Color(0,0,0,0.4));
-//            editorGC.fillText(String.valueOf(i%10),12*(height+i)+1,11);
-//            if(i%5==0){
-//                editorGC.setFill(new Color(0,0,0,0.06));
-//                editorGC.fillRect(12 * (6 + i), 15,12,25 * height);
-//            }else{
-//                editorGC.setStroke(new Color(0,0,0,0.06));
-//                editorGC.strokeLine(12 * (6 + i), 15, 12 * (6 + i), 15 + 25 * height);
-//            }
-//        }
-//        editorGC.setStroke(new Color(0,0,0,0.06));
-//        for(int i=0;i<height+1;i++){
-//            editorGC.strokeLine(12 * (1), 15+25*i, 12 * (6 + length), 15+25*i);
-//        }
-//        editorGC.setStroke(new Color(0,0,0,0.1));
-//        editorGC.strokeLine(12 * (1), 15+25*numControllers, 12 * (6 + length), 15+25*numControllers);
-//        editorGC.setFill(new Color(0.72,0.7,0.7,0.97));
-//        editorGC.setStroke(new Color(0.4,0.4,0.4,0.90));
-
-//        int x=2;
-//        int y=1;
-//        int w=12;
-//        editorGC.fillRect(12*(6+x)+1,15+25*(y)+1,12*w,25-2);
-//        editorGC.strokeRect(12*(6+x)+1,15+25*(y)+1,12*w,25-2);
-//        //Resolved icon
-//        editorGC.strokeOval(12*(6+x)+4,15+25*(y)+4,6,6);
-//        editorGC.strokeLine(12*(6+x)+4,15+25*(y)+4,12*(6+x)+4+6,15+25*(y)+4+6);
-//        editorGC.strokeLine(12*(6+x)+4+6,15+25*(y)+4,12*(6+x)+4,15+25*(y)+4+6);
-//        //keyframe icon
-//        editorGC.strokeRect(12*(6+x)+3,15+25*(y)+10+3,8,8);
-//        //Length icons
-//        if(w>=3) {
-//            editorGC.strokeRect(12 * (6 + x) + 10 + 4 + 18 + 3, 15 + 25 * (y) + 4, 12 * w - 10 - 4 - 18 - 3 - 3, 8);//for when special icon is shown
-//        }else if(w>=1){
-//            editorGC.strokeRect(12*(6+x)+10+4,15+25*(y)+4,12*w-10-4-3,8);// otherwise
-//        }
-//        //Special icon
-//        if(w>=3) {
-//            editorGC.strokeRect(12 * (6 + x) + 10 + 4, 15 + 25 * (y) + 3, 18, 18);
-//        }
-
-
         penSize.valueProperty().addListener((observable, oldValue, newValue) -> {
             p.strokeWeight(newValue.intValue());
         });
 
         bgBrightness.valueProperty().addListener((observable, oldValue, newValue) -> {
             p.bgColor = newValue.intValue();
-            p.redraw();
+//            p.redraw();
+            p.playbackInfo.updated();
         });
         frameNumberSlider.valueProperty().addListener((observable, oldValue, newValue)->{
 //            System.out.println("Frame selected:"+newValue.intValue());
@@ -159,6 +101,11 @@ public class Controller implements Initializable {
                 frameNumberSlider.setValue(p.playbackInfo.getFrame());
             }
             p.playbackInfo.setPlayback(playbackCheckBox.isSelected());
+        });
+        showGizmosCheckBox.setOnAction((e) -> {
+            System.out.println("ShowGizmos clicked");
+            p.playbackInfo.showGizmos=showGizmosCheckBox.isSelected();
+            p.playbackInfo.updated();
         });
 
         tweenEndFrameSlider.valueProperty().addListener((observable, oldValue, newValue)->{

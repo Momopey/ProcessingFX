@@ -20,6 +20,7 @@ public class MotionKeyframe extends Keyframe {
 
     public MotionKeyframe(int dFrameStart, int dLength){
         super(PAnim.MODETimelineMotion, dFrameStart, dLength);
+        newTransform= new SimpleMatrix();
     }
     public MotionKeyframe(int dFrameStart, int dLength, SimpleMatrix dNewTransform) {
         super(PAnim.MODETimelineMotion, dFrameStart, dLength);
@@ -44,5 +45,10 @@ public class MotionKeyframe extends Keyframe {
         if(requester instanceof SpaceMotionKeyframe){
             removeDependentResolveKeyframe(requester);
         }
+    }
+    @Override
+    public MotionKeyframe setName(String newName) {
+        Name=newName;
+        return this;
     }
 }

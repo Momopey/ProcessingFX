@@ -19,7 +19,7 @@ public class Timeline{
 
     public Timeline(Symbol dParentSymbol){
         parentSymbol= dParentSymbol;
-        spaceController=new SpaceKeyframeContainer(this);
+        spaceController=(SpaceKeyframeContainer) new SpaceKeyframeContainer(this).setName("Space Trans.");
         controllers= new ArrayList<KeyframeContainer>();
         controllers.add(spaceController);
     }

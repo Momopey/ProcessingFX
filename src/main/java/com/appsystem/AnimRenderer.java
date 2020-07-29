@@ -1,5 +1,6 @@
 package com.appsystem;
 
+import com.processing.PAnim;
 import processing.core.PGraphics;
 import com.symbol.ParentSymbol;
 
@@ -40,7 +41,7 @@ public class AnimRenderer extends Thread {
         try
         {
             graphicsRender.beginDraw();
-            graphicsRender.background(255);
+            graphicsRender.background(PAnim.processing.bgColor);
             graphicsRender.fill(0);
             graphicsRender.text("Frame loaded:" + frameNumber, 10, 20);
 
