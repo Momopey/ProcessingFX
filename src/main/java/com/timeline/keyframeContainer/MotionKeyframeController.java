@@ -5,8 +5,8 @@ import com.timeline.Timeline;
 
 // A timeline controller limited to containing Motion keyframes
 //Really doesnt add any functionality, just sets the mode
-public class MotionKeyframeContainer extends KeyframeContainer {
-    public MotionKeyframeContainer(Timeline dParent) {
+public class MotionKeyframeController extends KeyframeController {
+    public MotionKeyframeController(Timeline dParent) {
         super(dParent, PAnim.MODETimelineMotion);
     }
     //todo: SHOULD ONLY HAVE ACCESS TO SYMBOL POSITIONS

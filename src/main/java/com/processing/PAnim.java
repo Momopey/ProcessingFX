@@ -16,17 +16,15 @@ import com.symbol.ParentSymbol;
 import com.symbol.usermade.BallSymbol;
 import com.timeline.keyframe.motion.TransformSpaceMotionKeyframe;
 import com.timeline.keyframe.motion.TweenTransformMotionKeyframe;
-import com.timeline.keyframeContainer.KeyframeContainer;
-import com.timeline.keyframeContainer.MotionKeyframeContainer;
+import com.timeline.keyframeContainer.KeyframeController;
+import com.timeline.keyframeContainer.MotionKeyframeController;
 import com.timeline.keyframe.Keyframe;
 import com.util.SimpleMatrix;
 import javafx.application.Application;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.*;
 import net.bramp.ffmpeg.FFmpeg;
 import net.bramp.ffmpeg.FFmpegExecutor;
 import net.bramp.ffmpeg.builder.FFmpegBuilder;
@@ -150,22 +148,30 @@ public class PAnim extends PApplet {
             setFrame((int) Math.floor((((float)event.getX())-1f)/12f-6f));
         }
 
+        final KeyCombination keyCombRight = new KeyCodeCombination(KeyCode.PERIOD,KeyCombination.SHIFT_DOWN);
+        final KeyCombination keyCombLeft = new KeyCodeCombination(KeyCode.COMMA,KeyCombination.SHIFT_DOWN);
         @Override
         public void onKeyPressed(KeyEvent event){
+//            KeyCombination keyCombinationMac = new KeyCodeCombination(KeyCode.SHIFT, KeyCombination.ModifierValue.ANY);
             if(event.getCode()== KeyCode.RIGHT){
                 incFrame(1);
             }else if(event.getCode()== KeyCode.LEFT){
                 incFrame(-1);
+            }else if(keyCombRight.match(event)){
+                incFrame(10);
+            }else if(keyCombLeft.match(event)){
+                incFrame(-10);
+            }else if(event.getCode()== KeyCode.PERIOD){
+                incFrame(5);
+            }else if(event.getCode()== KeyCode.COMMA){
+                incFrame(-5);
             }
+
             if(event.getCode()== KeyCode.ENTER){
                 setPlayback(!playback);
             }
         }
     }
-
-
-
-
 
     @Override
     protected PSurface initSurface() {
@@ -235,7 +241,7 @@ public class PAnim extends PApplet {
                 ).setName("MainScene");//graphicsWindow.width/2,graphicsWindow.height/2
         System.out.println("Mainscene length"+ mainScene.getTimeline().length);;
         mainScene.getTimeline().setSize(0,100);
-        KeyframeContainer mainTranslationController=new MotionKeyframeContainer(mainScene.getTimeline()).setName("Main Translation Controller");
+        KeyframeController mainTranslationController=new MotionKeyframeController(mainScene.getTimeline()).setName("Main Translation Controller");
 
         TweenStartTranslationKeyframe= new TweenTransformMotionKeyframe(20).setName("Tween start translation");
         mainTranslationController.addKeyFrame(TweenStartTranslationKeyframe);
@@ -251,7 +257,7 @@ public class PAnim extends PApplet {
 
         mainScene.getTimeline().addTimelineController(mainTranslationController);
 
-        KeyframeContainer mainRotationController=new MotionKeyframeContainer(mainScene.getTimeline()).setName("Main Rotation Controller");
+        KeyframeController mainRotationController=new MotionKeyframeController(mainScene.getTimeline()).setName("Main Rotation Controller");
 
         TweenStartRotationKeyframe= new TweenTransformMotionKeyframe(20).setName("Tween Start rotation");
         mainRotationController.addKeyFrame(TweenStartRotationKeyframe);
@@ -271,7 +277,7 @@ public class PAnim extends PApplet {
         for(int i=0;i<1;i++) {
             BallSymbol circle = new BallSymbol(mainContainer, new PVector(random(graphicsWindow.width), random(graphicsWindow.height)), new PVector(100, 100), 50).setRenderMode(Symbol.RenderMode.STANDARD);
             circle.getTimeline().setSize(0, 1000);
-            KeyframeContainer BallController = new MotionKeyframeContainer(circle.getTimeline());
+            KeyframeController BallController = new MotionKeyframeController(circle.getTimeline());
             BallController.addKeyFrame(
                     new TweenTransformMotionKeyframe(0)
                             .setNewTransform(

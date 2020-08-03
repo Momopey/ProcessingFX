@@ -1,8 +1,8 @@
 package com.timeline.keyframe.motion;
 
 import com.timeline.keyframe.space.MotionSpaceKeyframe;
-import com.timeline.keyframeContainer.KeyframeContainer;
-import com.timeline.keyframeContainer.MotionKeyframeContainer;
+import com.timeline.keyframeContainer.KeyframeController;
+import com.timeline.keyframeContainer.MotionKeyframeController;
 import com.timeline.keyframe.Keyframe;
 import com.util.SimpleMatrix;
 
@@ -20,7 +20,7 @@ public abstract class SpaceMotionKeyframe extends MotionKeyframe {
     public SpaceMotionKeyframe(int dFrameStart, int dLength, SimpleMatrix dNewTransform) {
         super(dFrameStart, dLength, dNewTransform);
     }
-    public SpaceMotionKeyframe(KeyframeContainer dController, int dFrameStart, int dLength, SimpleMatrix dNewTransform) {
+    public SpaceMotionKeyframe(KeyframeController dController, int dFrameStart, int dLength, SimpleMatrix dNewTransform) {
         super(dController, dFrameStart, dLength, dNewTransform);
     }
 
@@ -51,10 +51,10 @@ public abstract class SpaceMotionKeyframe extends MotionKeyframe {
         return spaceTransform;
     }
     public void findTransformRelationships(){
-        ArrayList<KeyframeContainer> prevControllers= getParentController().getControllersBefore();
-        for(KeyframeContainer c :prevControllers){
-            if(c instanceof MotionKeyframeContainer){
-                ArrayList<Keyframe> keyframesAt= ((MotionKeyframeContainer)c).getKeyframesContaining(frameStart);
+        ArrayList<KeyframeController> prevControllers= getParentController().getControllersBefore();
+        for(KeyframeController c :prevControllers){
+            if(c instanceof MotionKeyframeController){
+                ArrayList<Keyframe> keyframesAt= ((MotionKeyframeController)c).getKeyframesContaining(frameStart);
                 for(Keyframe k:keyframesAt){
                     if(k instanceof MotionKeyframe){
                         MotionKeyframe motionkey= (MotionKeyframe)k;
@@ -84,11 +84,11 @@ public abstract class SpaceMotionKeyframe extends MotionKeyframe {
 //        }
         System.out.println("Recalculating spaceTransform ("+Name+") finding"+ requiredResolve.size()+" transform relationships");
         super.resolveKeyframe();
-        ArrayList<KeyframeContainer> prevControllers= getParentController().getControllersBefore();
+        ArrayList<KeyframeController> prevControllers= getParentController().getControllersBefore();
         pretransformationMatrix=new SimpleMatrix();
-        for(KeyframeContainer c :prevControllers){
-            if(c instanceof MotionKeyframeContainer){
-                ArrayList<Keyframe> keyframesAt= ((MotionKeyframeContainer)c).getKeyframesContaining(frameStart);
+        for(KeyframeController c :prevControllers){
+            if(c instanceof MotionKeyframeController){
+                ArrayList<Keyframe> keyframesAt= ((MotionKeyframeController)c).getKeyframesContaining(frameStart);
                 for(Keyframe k:keyframesAt){
                     if(k instanceof MotionKeyframe){
                         MotionKeyframe motionkey= (MotionKeyframe)k;

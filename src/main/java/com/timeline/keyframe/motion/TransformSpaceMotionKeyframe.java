@@ -1,6 +1,6 @@
 package com.timeline.keyframe.motion;
 
-import com.timeline.keyframeContainer.KeyframeContainer;
+import com.timeline.keyframeContainer.KeyframeController;
 import com.timeline.keyframe.space.TransformMotionSpaceKeyframe;
 import com.util.SimpleMatrix;
 
@@ -13,7 +13,7 @@ public class TransformSpaceMotionKeyframe extends SpaceMotionKeyframe {
     public TransformSpaceMotionKeyframe(int dFrameStart, int dLength, SimpleMatrix dNewTransform) {
         super(dFrameStart, dLength, dNewTransform);
     }
-    public TransformSpaceMotionKeyframe(KeyframeContainer dController, int dFrameStart, int dLength, SimpleMatrix dNewTransform) {
+    public TransformSpaceMotionKeyframe(KeyframeController dController, int dFrameStart, int dLength, SimpleMatrix dNewTransform) {
         super(dController, dFrameStart, dLength, dNewTransform);
     }
 
@@ -45,8 +45,7 @@ public class TransformSpaceMotionKeyframe extends SpaceMotionKeyframe {
             newTransform.apply(newSpaceMatrix);
             newTransform.apply(pretransformationMatrix.createInverse());
         }
-//        newSpace.resolveKeyframe();
-        newSpace.resolveNewSpace();
+        newSpace.resolveKeyframe();
     }
 
     @Override

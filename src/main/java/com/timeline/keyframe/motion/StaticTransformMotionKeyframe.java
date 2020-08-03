@@ -1,6 +1,6 @@
 package com.timeline.keyframe.motion;
 
-import com.timeline.keyframeContainer.KeyframeContainer;
+import com.timeline.keyframeContainer.KeyframeController;
 import com.timeline.keyframe.Keyframe;
 import com.util.SimpleMatrix;
 
@@ -9,7 +9,7 @@ public class StaticTransformMotionKeyframe extends MotionKeyframe {
     public StaticTransformMotionKeyframe(int dFrameStart, int dLength) {
         super(dFrameStart, dLength);
     }
-    public StaticTransformMotionKeyframe(KeyframeContainer dController, int dFrameStart, int dLength, SimpleMatrix dNewTransform) {
+    public StaticTransformMotionKeyframe(KeyframeController dController, int dFrameStart, int dLength, SimpleMatrix dNewTransform) {
         super(dController, dFrameStart, dLength, dNewTransform);
     }
     public StaticTransformMotionKeyframe(int dFrameStart, int dLength, SimpleMatrix dNewTransform) {

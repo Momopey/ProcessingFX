@@ -1,10 +1,10 @@
 package com.timeline;
 
+import com.processing.PAnim;
 import com.symbol.Symbol;
 import com.symbol.ParentSymbol;
-import com.timeline.keyframeContainer.KeyframeContainer;
-import com.timeline.keyframeContainer.SpaceKeyframeContainer;
-import javafx.scene.canvas.GraphicsContext;
+import com.timeline.keyframeContainer.KeyframeController;
+import com.timeline.keyframeContainer.SpaceKeyframeController;
 
 import java.util.ArrayList;
 // Timeline: A class for timelines associated with a symbol. Act as a container for timeline controllers.
@@ -13,14 +13,14 @@ public class Timeline{
     public int length;
     public Symbol parentSymbol;
 
-    public SpaceKeyframeContainer spaceController;
-    public ArrayList<KeyframeContainer> controllers;
+    public SpaceKeyframeController spaceController;
+    public ArrayList<KeyframeController> controllers;
     private int frameNumber;
 
     public Timeline(Symbol dParentSymbol){
         parentSymbol= dParentSymbol;
-        spaceController=(SpaceKeyframeContainer) new SpaceKeyframeContainer(this).setName("Space Trans.");
-        controllers= new ArrayList<KeyframeContainer>();
+        spaceController=(SpaceKeyframeController) new SpaceKeyframeController(this, PAnim.MODETimelineSpace).setName("Space Trans.");
+        controllers= new ArrayList<KeyframeController>();
         controllers.add(spaceController);
     }
     public void setSize(int dFrameStart,int dLength){
@@ -28,14 +28,14 @@ public class Timeline{
         length=dLength;
     }
     
-    public void addTimelineController(KeyframeContainer newController){
+    public void addTimelineController(KeyframeController newController){
 //        if(parentSymbol.usesMode(newController.mode)){
             newController.setParentTimeline(this);
             controllers.add(newController);
 //        }
     }
     public void fixTimeline(){
-        for( KeyframeContainer c : controllers){
+        for( KeyframeController c : controllers){
             c.fixController();
         }
     }
@@ -47,13 +47,13 @@ public class Timeline{
         parentSymbol.refreshDefault();
 
         for(int contnum=0;contnum<controllers.size();contnum++){//first check resolvement
-            KeyframeContainer thiscontroller= controllers.get(contnum);
+            KeyframeController thiscontroller= controllers.get(contnum);
             if(parentSymbol.usesMode(thiscontroller.getMode())){
                 thiscontroller.checkResolvement(frameNumber);
             }
         }
         for(int contnum=0;contnum<controllers.size();contnum++){//loop through
-            KeyframeContainer thiscontroller= controllers.get(contnum);
+            KeyframeController thiscontroller= controllers.get(contnum);
             if(parentSymbol.usesMode(thiscontroller.getMode())){
                 thiscontroller.LoadKeyframe(frameNumber);
             }
@@ -62,11 +62,6 @@ public class Timeline{
         if(parentSymbol instanceof ParentSymbol){// If the symbol has children
             ParentSymbol parentScene= (ParentSymbol)parentSymbol;// Cast to scene
             parentScene.symbolContainer.loadFrame(frameNumber,parentScene);
-        }
-    }
-    public void drawTimelineInEditor(GraphicsContext editorGC){
-        for(KeyframeContainer tc:controllers){
-            tc.drawKeyframesInTimeline(editorGC);
         }
     }
 }

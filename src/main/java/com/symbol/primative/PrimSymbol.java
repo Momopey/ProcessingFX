@@ -6,7 +6,7 @@ import com.symbol.Symbol;
 import com.symbol.ChildSymbol;
 import processing.core.PVector;
 
-public class PrimSymbol extends Symbol implements ChildSymbol {
+public abstract class PrimSymbol extends Symbol implements ChildSymbol {
     private SymbolContainer parentContainer;
     public PrimSymbol(SymbolContainer dParent, PVector dPos, PVector dCenter, float dAngle, float dScale, float dAlpha){
         super(dPos,dCenter,dAngle,dScale,dAlpha);

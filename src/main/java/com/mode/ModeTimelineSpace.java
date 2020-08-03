@@ -1,4 +1,8 @@
 package com.mode;
 
-public class ModeTimelineSpace implements Mode {
+import com.timeline.keyframe.space.SpaceKeyframe;
+public class ModeTimelineSpace extends DataMode {
+    public ModeTimelineSpace() {
+        super(SpaceKeyframe.class);
+    }
 }

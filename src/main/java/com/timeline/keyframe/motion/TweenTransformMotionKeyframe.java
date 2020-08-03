@@ -1,13 +1,11 @@
 package com.timeline.keyframe.motion;
 
-import com.debug.Debugable;
-import com.symbol.Symbol;
-import com.timeline.keyframeContainer.KeyframeContainer;
+import com.timeline.keyframeContainer.KeyframeController;
 import com.util.SimpleMatrix;
 
 //Tween transformation: lerps between this and the next keyframe motion (it needs to be a keyframemotion)
 public class TweenTransformMotionKeyframe extends MotionKeyframe {
-    public TweenTransformMotionKeyframe(KeyframeContainer dController, int dFrameStart, SimpleMatrix dNewTransform) {
+    public TweenTransformMotionKeyframe(KeyframeController dController, int dFrameStart, SimpleMatrix dNewTransform) {
         super(dController,dFrameStart, 1, dNewTransform);
     }
     public TweenTransformMotionKeyframe(int dFrameStart) {

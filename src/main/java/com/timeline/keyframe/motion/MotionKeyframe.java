@@ -1,7 +1,7 @@
 package com.timeline.keyframe.motion;
 
 import com.processing.PAnim;
-import com.timeline.keyframeContainer.KeyframeContainer;
+import com.timeline.keyframeContainer.KeyframeController;
 import com.timeline.keyframe.Keyframe;
 import com.util.SimpleMatrix;
 
@@ -26,7 +26,7 @@ public class MotionKeyframe extends Keyframe {
         super(PAnim.MODETimelineMotion, dFrameStart, dLength);
         newTransform= dNewTransform;
     }
-    public MotionKeyframe(KeyframeContainer dController, int dFrameStart, int dLength, SimpleMatrix dNewTransform) {
+    public MotionKeyframe(KeyframeController dController, int dFrameStart, int dLength, SimpleMatrix dNewTransform) {
         super(PAnim.MODETimelineMotion,dController, dFrameStart, dLength);
         newTransform= dNewTransform;
     }

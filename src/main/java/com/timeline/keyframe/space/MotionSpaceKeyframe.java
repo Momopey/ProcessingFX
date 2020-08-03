@@ -1,14 +1,13 @@
 package com.timeline.keyframe.space;
 
 import com.mode.Mode;
-import com.timeline.keyframe.motion.TweenTransformMotionKeyframe;
-import com.timeline.keyframeContainer.KeyframeContainer;
+import com.timeline.keyframeContainer.KeyframeController;
 import com.timeline.keyframe.Keyframe;
 import com.timeline.keyframe.motion.SpaceMotionKeyframe;
 import com.util.SimpleMatrix;
 
 //MotionSpaceKeyframe: keyframeSpace with connection to a keyframemotionspace keyframe
-public abstract class MotionSpaceKeyframe extends SpaceKeyframe {
+public class MotionSpaceKeyframe extends SpaceKeyframe {
     protected SpaceMotionKeyframe transformKeyframe;
     protected SpaceKeyframe prevSpaceKeyframe;
 
@@ -17,7 +16,7 @@ public abstract class MotionSpaceKeyframe extends SpaceKeyframe {
         transformKeyframe=dTransformer;
     }
 
-    public MotionSpaceKeyframe(Mode dMode, KeyframeContainer dParentController, int dFrameStart, SimpleMatrix dSpace) {
+    public MotionSpaceKeyframe(Mode dMode, KeyframeController dParentController, int dFrameStart, SimpleMatrix dSpace) {
         super(dMode, dParentController, dFrameStart, dSpace);
     }
     public SpaceKeyframe getPrevSpaceKeyframe() {
@@ -112,7 +111,9 @@ public abstract class MotionSpaceKeyframe extends SpaceKeyframe {
         checkKeyframeResolve();
         super.resolveKeyframe();
     }
-    public abstract void resolveNewSpace();//
+    public void resolveNewSpace(){
+        //child fill implement if needed
+    };//
     @Override
     public String getDebugInfo(){
         if(prevSpaceKeyframe !=null) {

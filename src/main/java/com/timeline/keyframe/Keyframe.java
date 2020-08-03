@@ -9,7 +9,7 @@ import com.mode.Mode;
 import com.processing.PAnim;
 import com.symbol.Symbol;
 import com.timeline.Timeline;
-import com.timeline.keyframeContainer.KeyframeContainer;
+import com.timeline.keyframeContainer.KeyframeController;
 import com.timeline.keyframe.statechange.StateChangeKeyframe;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
@@ -17,7 +17,7 @@ import javafx.scene.input.MouseEvent;
 import java.util.LinkedHashSet;
 
 //Keyframe: A class for keyframes within timelinecontrollers. Controlls certain parameters in the parent symbol.
-public class Keyframe extends EditorField implements Debugable {
+public abstract class Keyframe extends EditorField implements Debugable {
     protected String Name;
 
     protected int frameStart;
@@ -52,7 +52,7 @@ public class Keyframe extends EditorField implements Debugable {
 
 
     protected Mode mode;
-    protected KeyframeContainer parentController;
+    protected KeyframeController parentController;
     protected boolean resolved=false;//Keyframe will only animate if resolved
     protected LinkedHashSet<Keyframe> requiredResolve;// The keyframes that are required to be resolved for this keyframe to be resolved;
     //If this keyframe is asked to resolve itself (during a frameload), it must first resolve all of these keyframes before resolving itself (if they aren't resolved).
@@ -67,7 +67,7 @@ public class Keyframe extends EditorField implements Debugable {
         this.mode = mode;
     }
 
-    public KeyframeContainer getParentController() {
+    public KeyframeController getParentController() {
         return parentController;
     }
 
@@ -91,7 +91,7 @@ public class Keyframe extends EditorField implements Debugable {
 //            System.out.println("Wrong mode for keymode");
 //        }
     }
-    public Keyframe(Mode dMode, KeyframeContainer dParentController, int dFrameStart, int dLength){
+    public Keyframe(Mode dMode, KeyframeController dParentController, int dFrameStart, int dLength){
         frameStart=dFrameStart;
         length=dLength;
         mode=dMode;
@@ -104,7 +104,7 @@ public class Keyframe extends EditorField implements Debugable {
     }
 
 
-    public void setParentController(KeyframeContainer parentController) {
+    public void setParentController(KeyframeController parentController) {
         this.parentController = parentController;
         if(parentController.getParentTimeline().parentSymbol == PAnim.processing.editorCanvasHandler.getEditorActiveSymbol()){
             addToEditorCanvasHandler();
@@ -181,7 +181,7 @@ public class Keyframe extends EditorField implements Debugable {
             }
         }
     }
-    public void inFrameModifyDetails(int dFrameNum){};//framenum relatvie to start of keyframe
+    public abstract void inFrameModifyDetails(int dFrameNum);//framenum relatvie to start of keyframe
     public void afterFrameModifyDetails(int dFrameNum){};//framenum relatvie to start of keyframe, run code after the keyframe : USE SPARINGLY
 
 

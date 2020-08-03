@@ -3,12 +3,11 @@ package com.javafx.editor;
 import com.javafx.Controller;
 import com.symbol.ParentSymbol;
 import com.timeline.keyframe.Keyframe;
-import com.timeline.keyframeContainer.KeyframeContainer;
+import com.timeline.keyframeContainer.KeyframeController;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import sun.jvm.hotspot.ui.Editor;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,14 +17,14 @@ public class EditorCanvasHandler {
 
     public void setActiveSymbol(ParentSymbol mainScene) {
         if(editorActiveSymbol!=null){
-            for(KeyframeContainer ct: editorActiveSymbol.getTimeline().controllers){
+            for(KeyframeController ct: editorActiveSymbol.getTimeline().controllers){
                 for(Keyframe kf: ct.getKeyframes()){
                     kf.removeFromEditorCanvasHandler();
                 }
             }
         }
         editorActiveSymbol=mainScene;
-        for(KeyframeContainer ct: editorActiveSymbol.getTimeline().controllers){
+        for(KeyframeController ct: editorActiveSymbol.getTimeline().controllers){
             for(Keyframe kf: ct.getKeyframes()){
                 kf.addToEditorCanvasHandler();
             }

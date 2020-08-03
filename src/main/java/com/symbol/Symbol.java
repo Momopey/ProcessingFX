@@ -19,7 +19,7 @@ import java.util.Set;
 import static processing.core.PApplet.floor;
 
 // The base class of all animated objects in Panim(to be renamed). Inherits some necicary functionality from the interface
-public class Symbol implements SymbolFunctionality, Debugable {
+public abstract class Symbol implements SymbolFunctionality, Debugable {
 
     public Color getTint() {
         return tint;
@@ -171,9 +171,7 @@ public class Symbol implements SymbolFunctionality, Debugable {
 //    public void render(PShape shape){
 //        shape.ma
 //    }
-    public void viewDraw(PGraphics graphic){
-        //CHILD IMPLEMENT
-    }
+    public abstract void viewDraw(PGraphics graphic);
 
     public void addMode(Mode mode){
         modes.add(mode);
