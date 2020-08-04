@@ -9,7 +9,7 @@ import com.mode.Mode;
 import com.processing.PAnim;
 import com.symbol.Symbol;
 import com.timeline.Timeline;
-import com.timeline.keyframeContainer.KeyframeController;
+import com.timeline.keyframeController.KeyframeController;
 import com.timeline.keyframe.statechange.StateChangeKeyframe;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
@@ -263,6 +263,7 @@ public abstract class Keyframe extends EditorField implements Debugable {
             checkDependentResolves();
         }
     }
+    //Check if the keyframe is already resolved
     public void checkKeyframeResolve(){
         resolved=false;//Implementations need to be more intelegent here
     }

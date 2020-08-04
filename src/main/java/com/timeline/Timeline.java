@@ -3,8 +3,8 @@ package com.timeline;
 import com.processing.PAnim;
 import com.symbol.Symbol;
 import com.symbol.ParentSymbol;
-import com.timeline.keyframeContainer.KeyframeController;
-import com.timeline.keyframeContainer.SpaceKeyframeController;
+import com.timeline.keyframeController.KeyframeController;
+import com.timeline.keyframeController.SpaceKeyframeController;
 
 import java.util.ArrayList;
 // Timeline: A class for timelines associated with a symbol. Act as a container for timeline controllers.
@@ -19,7 +19,7 @@ public class Timeline{
 
     public Timeline(Symbol dParentSymbol){
         parentSymbol= dParentSymbol;
-        spaceController=(SpaceKeyframeController) new SpaceKeyframeController(this, PAnim.MODETimelineSpace).setName("Space Trans.");
+        spaceController=(SpaceKeyframeController) new SpaceKeyframeController(this).setName("Space Trans.");
         controllers= new ArrayList<KeyframeController>();
         controllers.add(spaceController);
     }

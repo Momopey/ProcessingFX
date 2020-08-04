@@ -1,6 +1,6 @@
 package com.timeline.keyframe.motion;
 
-import com.timeline.keyframeContainer.KeyframeController;
+import com.timeline.keyframeController.KeyframeController;
 import com.util.SimpleMatrix;
 
 //Tween transformation: lerps between this and the next keyframe motion (it needs to be a keyframemotion)

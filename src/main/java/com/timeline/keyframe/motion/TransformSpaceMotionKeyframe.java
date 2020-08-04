@@ -1,7 +1,7 @@
 package com.timeline.keyframe.motion;
 
-import com.timeline.keyframeContainer.KeyframeController;
-import com.timeline.keyframe.space.TransformMotionSpaceKeyframe;
+import com.timeline.keyframe.data.space.SpaceKeyframe;
+import com.timeline.keyframeController.KeyframeController;
 import com.util.SimpleMatrix;
 
 
@@ -23,16 +23,13 @@ public class TransformSpaceMotionKeyframe extends SpaceMotionKeyframe {
     protected void createKeyframeSpace(){
         if (newSpace == null) {
             System.out.println(Name);
-            newSpace = new TransformMotionSpaceKeyframe(frameStart, this);
+            newSpace = new SpaceKeyframe(frameStart);
             newSpace.setName(Name + " Keyframe space transform");
             newSpace.requestResolveRelationship(this);
 //                addRequiredResolveRelationship(newSpace);// newSpace depends on this keyframe
             addDependentResolveKeyframe(newSpace);
             getParentTimeline().spaceController.addKeyFrame(newSpace);
         }
-//        if(newSpaceMatrix!=null)
-//            spaceTransform=
-//        }
         newSpace.resolveRequiredKeyframes();
         if(newTransform!=null) {
             spaceTransform = pretransformationMatrix.clone();
@@ -48,9 +45,25 @@ public class TransformSpaceMotionKeyframe extends SpaceMotionKeyframe {
         newSpace.resolveKeyframe();
     }
 
+
     @Override
     public TransformSpaceMotionKeyframe setName(String newName) {
         Name=newName;
         return this;
+    }
+
+    @Override
+    public boolean checkResolveKeyframe(SpaceKeyframe data) {
+        if(data.getFrameStart()!=frameStart){
+            data.setFrameStart(frameStart);
+            data.fixKeyframeIndex();
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void modifyKeyframe(SpaceKeyframe data) {
+        data.setNewSpace(getNewSpaceMatrix().clone());
     }
 }

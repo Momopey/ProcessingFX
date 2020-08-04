@@ -1,19 +1,22 @@
 package com.timeline.keyframe.motion;
 
-import com.timeline.keyframe.space.MotionSpaceKeyframe;
-import com.timeline.keyframeContainer.KeyframeController;
-import com.timeline.keyframeContainer.MotionKeyframeController;
+import com.mode.DataMode;
+import com.processing.PAnim;
+import com.timeline.keyframe.data.DataModifierKeyframe;
+import com.timeline.keyframe.data.space.SpaceKeyframe;
+import com.timeline.keyframeController.KeyframeController;
+import com.timeline.keyframeController.MotionKeyframeController;
 import com.timeline.keyframe.Keyframe;
 import com.util.SimpleMatrix;
 
 import java.util.ArrayList;
 
 // Keyframe motion space: an abstract class regarding keyframes that have a transform that turns into a space transform, resulting in a permanent transormation. Permanent too if a tween is used before it.
-public abstract class SpaceMotionKeyframe extends MotionKeyframe {
+public abstract class SpaceMotionKeyframe extends MotionKeyframe implements DataModifierKeyframe<SpaceKeyframe> {
     SimpleMatrix pretransformationMatrix;
     SimpleMatrix spaceTransform;
     SimpleMatrix newSpaceMatrix;
-    MotionSpaceKeyframe newSpace;
+    SpaceKeyframe newSpace;
     public SpaceMotionKeyframe(int dFrameStart, int dLength) {
         super(dFrameStart, dLength);
     }
@@ -139,5 +142,15 @@ public abstract class SpaceMotionKeyframe extends MotionKeyframe {
     public SpaceMotionKeyframe setName(String newName) {
         Name=newName;
         return this;
+    }
+
+    @Override
+    public DataMode getDataMode() {
+        return PAnim.MODETimelineSpace;
+    }
+
+    @Override
+    public boolean causesHistoryDependance() {
+        return true;
     }
 }

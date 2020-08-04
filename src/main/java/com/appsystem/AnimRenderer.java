@@ -45,9 +45,9 @@ public class AnimRenderer extends Thread {
             graphicsRender.fill(0);
             graphicsRender.text("Frame loaded:" + frameNumber, 10, 20);
 
+//            for(int a=1;a<1;a++){
             if(frameNumber>=1) {
                 scene.loadFrame(frameNumber - 1);
-//                scene.setAlpha(0.2f);
                 scene.setTint(new Color(255,230,230,51));
                 scene.render(graphicsRender);
             }

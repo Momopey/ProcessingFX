@@ -1,7 +1,7 @@
 package com.timeline.keyframe.motion;
 
 import com.processing.PAnim;
-import com.timeline.keyframeContainer.KeyframeController;
+import com.timeline.keyframeController.KeyframeController;
 import com.timeline.keyframe.Keyframe;
 import com.util.SimpleMatrix;
 

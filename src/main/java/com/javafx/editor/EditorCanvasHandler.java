@@ -3,7 +3,7 @@ package com.javafx.editor;
 import com.javafx.Controller;
 import com.symbol.ParentSymbol;
 import com.timeline.keyframe.Keyframe;
-import com.timeline.keyframeContainer.KeyframeController;
+import com.timeline.keyframeController.KeyframeController;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
