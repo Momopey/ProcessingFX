@@ -34,14 +34,14 @@ public class TweenTransformMotionKeyframe extends MotionKeyframe {
         return new SimpleMatrix();
     }
     @Override
-    public void resolveKeyframe(){
+    public void resolve(){
         lengthenToNextKeyframe();
         System.out.println("("+Name+" )New length:"+length);
         if(nextKeyframe()!=null) {
 //            addRequiredResolveKeyframe(nextKeyframe());
             nextKeyframe().requestResolveRelationship(this);
         }
-        super.resolveKeyframe();
+        super.resolve();
 //        System.out.println("fixing the thing");
     }
     @Override

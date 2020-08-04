@@ -77,7 +77,7 @@ public abstract class SpaceMotionKeyframe extends MotionKeyframe implements Data
         }
     }
     @Override
-    public void resolveKeyframe(){
+    public void resolve(){
         //The transformation matrix is the pretransform times matrix times pretransform inverse
         resolved=true;
 //        if(pretransformationMatrix==null){
@@ -86,7 +86,7 @@ public abstract class SpaceMotionKeyframe extends MotionKeyframe implements Data
             removeTransformRelations();
 //        }
         System.out.println("Recalculating spaceTransform ("+Name+") finding"+ requiredResolve.size()+" transform relationships");
-        super.resolveKeyframe();
+        super.resolve();
         ArrayList<KeyframeController> prevControllers= getParentController().getControllersBefore();
         pretransformationMatrix=new SimpleMatrix();
         for(KeyframeController c :prevControllers){
@@ -95,7 +95,7 @@ public abstract class SpaceMotionKeyframe extends MotionKeyframe implements Data
                 for(Keyframe k:keyframesAt){
                     if(k instanceof MotionKeyframe){
                         MotionKeyframe motionkey= (MotionKeyframe)k;
-                        motionkey.resolveKeyframe();
+                        motionkey.resolve();
                         System.out.println("( "+motionkey.getName()+" ) is a related transform with length "+motionkey.getLength());
                         pretransformationMatrix.apply(motionkey.getTransformAt(motionkey.getFrameNumberIn(getFrameNumberOut(0))));
                         motionkey.requestResolveRelationship(this);

@@ -6,7 +6,6 @@ import com.timeline.keyframe.data.DataKeyframe;
 import com.timeline.keyframe.data.DataModifierKeyframe;
 import com.timeline.keyframeController.KeyframeController;
 import com.timeline.keyframe.Keyframe;
-import com.timeline.keyframe.motion.SpaceMotionKeyframe;
 import com.util.SimpleMatrix;
 
 //SpaceKeyframe: Keyframe containing a space matrix
@@ -79,7 +78,7 @@ public class SpaceKeyframe extends DataKeyframe {
         super.checkKeyframeResolve();
     }
     @Override
-    public void resolveKeyframe(){
+    public void resolve(){
 
         resolveRequiredKeyframes();
 //        System.out.println("("+Name+") framestart:"+frameStart+"  length:"+length +"PrevKeyframeSpace:("+ prevDataKeyframe.getName()+")");
@@ -89,7 +88,7 @@ public class SpaceKeyframe extends DataKeyframe {
     }
     public void resolveRequiredKeyframes(){
         checkKeyframeResolve();
-        super.resolveKeyframe();
+        super.resolve();
     }
     public void resolveModifiers(){
         //child fill implement if needed

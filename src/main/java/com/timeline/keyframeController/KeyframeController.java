@@ -1,6 +1,6 @@
 package com.timeline.keyframeController;
 
-import com.debug.Debugable;
+import com.util.debug.Debugable;
 import com.mode.Mode;
 import com.timeline.keyframe.Keyframe;
 import com.timeline.Timeline;
@@ -63,7 +63,7 @@ public class KeyframeController implements Debugable {
             Keyframe thiskeyframe = keyframes.get(keyframenum);
 //            int frameNum = thiskeyframe.getFrameNumberIn(dFrameNumber);
             if (thiskeyframe.needsToBeResolvedAt(dFrameNumber)) {
-                    thiskeyframe.resolveKeyframe();
+                    thiskeyframe.resolve();
             }
         }
     }
@@ -113,7 +113,7 @@ public class KeyframeController implements Debugable {
 
     public void fixController(){
         for(int i=0; i<keyframes.size();i++){
-            keyframes.get(i).resolveKeyframe();
+            keyframes.get(i).resolve();
         }
     }
 

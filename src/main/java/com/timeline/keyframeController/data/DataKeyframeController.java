@@ -45,7 +45,7 @@ public class DataKeyframeController<T extends DataKeyframe> extends KeyframeCont
 ////        newKeyframe.addRequiredResolveKeyframe(keyframe); now  part of the combine with keyframe
         //I just removed the previous frame removal deliniation: check if this becomes a problem later
         super.addKeyFrame(newKeyframe);
-        keyframe.resolveKeyframe();
+        keyframe.resolve();
     }
 
 }

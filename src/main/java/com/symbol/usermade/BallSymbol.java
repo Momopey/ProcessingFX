@@ -1,7 +1,5 @@
 package com.symbol.usermade;
 
-import com.debug.Debugable;
-import com.symbol.Symbol;
 import com.symbol.SymbolContainer;
 import com.symbol.primative.CircleSymbol;
 import processing.core.PVector;

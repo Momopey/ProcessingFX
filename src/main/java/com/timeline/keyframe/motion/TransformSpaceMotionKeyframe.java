@@ -42,7 +42,7 @@ public class TransformSpaceMotionKeyframe extends SpaceMotionKeyframe {
             newTransform.apply(newSpaceMatrix);
             newTransform.apply(pretransformationMatrix.createInverse());
         }
-        newSpace.resolveKeyframe();
+        newSpace.resolve();
     }
 
 

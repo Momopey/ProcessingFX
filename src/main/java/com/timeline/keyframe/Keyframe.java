@@ -1,6 +1,6 @@
 package com.timeline.keyframe;
 
-import com.debug.Debugable;
+import com.util.Resolvable;
 import com.javafx.Controller;
 import com.javafx.editor.EditorCanvasHandler;
 import com.javafx.editor.EditorField;
@@ -11,13 +11,15 @@ import com.symbol.Symbol;
 import com.timeline.Timeline;
 import com.timeline.keyframeController.KeyframeController;
 import com.timeline.keyframe.statechange.StateChangeKeyframe;
+import com.util.debug.Debugable;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
 
+import java.security.Key;
 import java.util.LinkedHashSet;
 
 //Keyframe: A class for keyframes within timelinecontrollers. Controlls certain parameters in the parent symbol.
-public abstract class Keyframe extends EditorField implements Debugable {
+public abstract class Keyframe extends EditorField implements Debugable, Resolvable {
     protected String Name;
 
     protected int frameStart;
@@ -215,9 +217,88 @@ public abstract class Keyframe extends EditorField implements Debugable {
     protected void removeRequiredResolveKeyframe(Keyframe prevRequiredKeyframe){
         requiredResolve.remove(prevRequiredKeyframe);
     }
-    public void requestResolveRelationship(Keyframe requester){
+    public abstract void requestResolveRelationship(Keyframe requester);
+
+    public abstract void removeResolveRelationship(Keyframe requester);
+
+    @Override
+    public void addDependentResolveRelationship(Resolvable dependentResolvable) {
+        if(dependentResolvable instanceof Keyframe){
+            Keyframe k = (Keyframe) dependentResolvable;
+            addDependentResolveRelationship(k);
+        }
     }
-    public void removeResolveRelationship(Keyframe requester){
+
+    @Override
+    public void addRequiredResolveRelationship(Resolvable requiredResolvable) {
+        if(requiredResolvable instanceof Keyframe){
+            Keyframe k= (Keyframe) requiredResolvable;
+            addRequiredResolveKeyframe(k);
+        }
+    }
+
+    @Override
+    public void removeDependentResolveRelationship(Resolvable prevDepResolvable) {
+        if(prevDepResolvable instanceof Keyframe){
+            Keyframe k= (Keyframe) prevDepResolvable;
+            removeDependentResolveRelationship(k);
+        }
+    }
+
+    @Override
+    public void removeRequiredResolveRelationship(Resolvable prevReqResolvable) {
+        if(prevReqResolvable instanceof Keyframe){
+            Keyframe k= (Keyframe) prevReqResolvable;
+            removeRequiredResolveRelationship(k);
+        }
+    }
+
+    @Override
+    public void addDependentResolveKeyframe(Resolvable dependentResolvable) {
+        if(dependentResolvable instanceof Keyframe){
+            Keyframe k= (Keyframe) dependentResolvable;
+            addDependentResolveKeyframe(k);
+        }
+    }
+
+    @Override
+    public void removeDependentResolveKeyframe(Resolvable prevDependentResolvable) {
+        if(prevDependentResolvable instanceof Keyframe){
+            Keyframe k= (Keyframe) prevDependentResolvable;
+            removeDependentResolveKeyframe(k);
+        }
+    }
+
+    @Override
+    public void addRequiredResolveKeyframe(Resolvable requiredResolvable) {
+        if(requiredResolvable instanceof Keyframe){
+            Keyframe k= (Keyframe) requiredResolvable;
+            addRequiredResolveKeyframe(k);
+        }
+    }
+
+    @Override
+    public void removeRequiredResolveKeyframe(Resolvable prevRequiredResolvable) {
+        if(prevRequiredResolvable instanceof Keyframe){
+            Keyframe k= (Keyframe) prevRequiredResolvable;
+            removeRequiredResolveKeyframe(k);
+        }
+    }
+
+    @Override
+    public void requestResolveRelationship(Resolvable requester) {
+        if(requester instanceof Keyframe){
+            Keyframe k= (Keyframe) requester;
+            requestResolveRelationship(k);
+        }
+    }
+
+    @Override
+    public void removeResolveRelationship(Resolvable requester) {
+        if(requester instanceof Keyframe){
+            Keyframe k= (Keyframe) requester;
+            removeResolveRelationship(k);
+        }
     }
 
     public boolean isResolved() {
@@ -231,7 +312,7 @@ public abstract class Keyframe extends EditorField implements Debugable {
         }
         return false;
     }
-    public void resolveKeyframe(){
+    public void resolve(){
         resolved=true;
         String namesConcat="";
         for(Keyframe req:requiredResolve){
@@ -241,7 +322,7 @@ public abstract class Keyframe extends EditorField implements Debugable {
         for (Keyframe K : requiredResolve) {
 //                System.out.println("K:"+K.isResolved());
             if (!K.isResolved()) {
-                K.resolveKeyframe();
+                K.resolve();
             }
         }
         System.out.println("^: Finished resolving ("+Name+")'s required keyframes");

@@ -3,7 +3,6 @@ package com.timeline.keyframe.data;
 import com.mode.Mode;
 import com.timeline.keyframe.Keyframe;
 import com.timeline.keyframe.data.space.SpaceKeyframe;
-import com.timeline.keyframe.motion.SpaceMotionKeyframe;
 import com.timeline.keyframeController.KeyframeController;
 
 import java.util.ArrayList;
@@ -84,10 +83,10 @@ public abstract class DataKeyframe extends Keyframe {
         lengthenToNextKeyframe();//Maybe a bad idea but i dont think so
     }
     @Override
-    public void resolveKeyframe(){
+    public void resolve(){
         loadNextKeyframe();
         lengthenToNextKeyframe();
-        super.resolveKeyframe();
+        super.resolve();
 //        System.out.println();
     }
     @Override

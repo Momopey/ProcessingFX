@@ -1,12 +1,12 @@
 package com.symbol;
 
 
-import com.debug.Debugable;
 import com.javafx.editor.EditorCanvasHandler;
 import com.mode.Mode;
 import com.processing.PAnim;
 import com.timeline.Timeline;
 import com.util.SimpleMatrix;
+import com.util.debug.Debugable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.text.Font;
